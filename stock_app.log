@@ -1,0 +1,73 @@
+2025-01-30 13:15:58,119 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-30 13:15:58,119 - INFO - [33mPress CTRL+C to quit[0m
+2025-01-30 13:15:58,121 - INFO -  * Restarting with stat
+2025-01-30 13:15:58,946 - WARNING -  * Debugger is active!
+2025-01-30 13:15:58,948 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 13:16:08,384 - INFO - 127.0.0.1 - - [30/Jan/2025 13:16:08] "GET / HTTP/1.1" 200 -
+2025-01-30 13:16:08,570 - INFO - 127.0.0.1 - - [30/Jan/2025 13:16:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-01-30 13:16:13,227 - ERROR - Error fetching stock quote for infy: 'NSE' object has no attribute 'get_quote'
+2025-01-30 13:16:13,229 - INFO - 127.0.0.1 - - [30/Jan/2025 13:16:13] "[35m[1mPOST /get_stock HTTP/1.1[0m" 500 -
+2025-01-30 13:17:59,254 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-30 13:17:59,254 - INFO - [33mPress CTRL+C to quit[0m
+2025-01-30 13:17:59,254 - INFO -  * Restarting with stat
+2025-01-30 13:18:00,206 - WARNING -  * Debugger is active!
+2025-01-30 13:18:00,206 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 13:18:09,482 - INFO - 127.0.0.1 - - [30/Jan/2025 13:18:09] "GET / HTTP/1.1" 200 -
+2025-01-30 13:18:14,559 - ERROR - Error fetching stock quote for tcs: 'NSE' object has no attribute 'get_quote'
+2025-01-30 13:18:14,559 - INFO - 127.0.0.1 - - [30/Jan/2025 13:18:14] "[35m[1mPOST /get_stock HTTP/1.1[0m" 500 -
+2025-01-30 13:20:13,243 - INFO -  * Detected change in 'e:\\Python Learn\\Test Webapp\\app.py', reloading
+2025-01-30 13:20:13,317 - INFO -  * Restarting with stat
+2025-01-30 13:22:05,114 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-30 13:22:05,114 - INFO - [33mPress CTRL+C to quit[0m
+2025-01-30 13:22:05,117 - INFO -  * Restarting with stat
+2025-01-30 13:22:06,092 - WARNING -  * Debugger is active!
+2025-01-30 13:22:06,092 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 13:22:10,968 - INFO - 127.0.0.1 - - [30/Jan/2025 13:22:10] "GET / HTTP/1.1" 200 -
+2025-01-30 13:22:12,077 - INFO - 127.0.0.1 - - [30/Jan/2025 13:22:12] "GET / HTTP/1.1" 200 -
+2025-01-30 13:22:17,940 - ERROR - Error fetching stock quote for INFY: 'NSE' object has no attribute 'get_quote'
+2025-01-30 13:22:17,941 - INFO - 127.0.0.1 - - [30/Jan/2025 13:22:17] "[35m[1mPOST /get_stock HTTP/1.1[0m" 500 -
+2025-01-30 13:22:54,014 - INFO -  * Detected change in 'e:\\Python Learn\\Test Webapp\\app.py', reloading
+2025-01-30 13:22:54,065 - INFO -  * Restarting with stat
+2025-01-30 13:22:55,117 - WARNING -  * Debugger is active!
+2025-01-30 13:22:55,117 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 13:23:01,115 - INFO - Successfully fetched data for INFY
+2025-01-30 13:23:01,117 - INFO - 127.0.0.1 - - [30/Jan/2025 13:23:01] "POST /get_stock HTTP/1.1" 200 -
+2025-01-30 13:26:52,231 - INFO -  * Detected change in 'e:\\Python Learn\\Test Webapp\\app.py', reloading
+2025-01-30 13:26:52,333 - INFO -  * Restarting with stat
+2025-01-30 13:26:54,462 - WARNING -  * Debugger is active!
+2025-01-30 13:26:54,464 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 13:26:57,082 - ERROR - Error fetching stock quote for INFY: get_history() missing 2 required positional arguments: 'start' and 'end'
+2025-01-30 13:26:57,083 - INFO - 127.0.0.1 - - [30/Jan/2025 13:26:57] "[35m[1mPOST /get_stock HTTP/1.1[0m" 500 -
+2025-01-30 13:43:44,033 - INFO -  * Detected change in 'e:\\Python Learn\\Test Webapp\\app.py', reloading
+2025-01-30 13:43:44,279 - INFO -  * Restarting with stat
+2025-01-30 13:43:46,141 - WARNING -  * Debugger is active!
+2025-01-30 13:43:46,145 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 13:43:54,581 - INFO - 127.0.0.1 - - [30/Jan/2025 13:43:54] "[31m[1mGET /get_stock HTTP/1.1[0m" 405 -
+2025-01-30 13:43:58,245 - INFO - 127.0.0.1 - - [30/Jan/2025 13:43:58] "GET / HTTP/1.1" 200 -
+2025-01-30 13:44:02,631 - ERROR - Error fetching stock quote for infy: get_history() missing 2 required positional arguments: 'start' and 'end'
+2025-01-30 13:44:02,632 - INFO - 127.0.0.1 - - [30/Jan/2025 13:44:02] "[35m[1mPOST /get_stock HTTP/1.1[0m" 500 -
+2025-01-30 13:45:35,184 - INFO -  * Detected change in 'e:\\Python Learn\\Test Webapp\\app.py', reloading
+2025-01-30 13:45:35,383 - INFO -  * Restarting with stat
+2025-01-30 13:45:37,264 - WARNING -  * Debugger is active!
+2025-01-30 13:45:37,264 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 13:45:38,952 - INFO - 127.0.0.1 - - [30/Jan/2025 13:45:38] "GET / HTTP/1.1" 200 -
+2025-01-30 13:45:43,456 - INFO - 127.0.0.1 - - [30/Jan/2025 13:45:43] "[33mPOST /get_stock HTTP/1.1[0m" 404 -
+2025-01-30 13:45:50,490 - INFO - 127.0.0.1 - - [30/Jan/2025 13:45:50] "[33mPOST /get_stock HTTP/1.1[0m" 404 -
+2025-01-30 13:55:00,551 - INFO -  * Detected change in 'e:\\Python Learn\\Test Webapp\\testing.py', reloading
+2025-01-30 13:55:00,798 - INFO -  * Restarting with stat
+2025-01-30 13:55:02,680 - WARNING -  * Debugger is active!
+2025-01-30 13:55:02,681 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 14:10:15,014 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-30 14:10:15,014 - INFO - [33mPress CTRL+C to quit[0m
+2025-01-30 14:10:15,014 - INFO -  * Restarting with stat
+2025-01-30 14:10:16,974 - WARNING -  * Debugger is active!
+2025-01-30 14:10:16,974 - INFO -  * Debugger PIN: 315-009-391
+2025-01-30 14:10:22,259 - INFO - 127.0.0.1 - - [30/Jan/2025 14:10:22] "GET / HTTP/1.1" 200 -
+2025-01-30 14:10:31,296 - ERROR - Error fetching stock quote for bajfinance: 'dict' object has no attribute 'empty'
+2025-01-30 14:10:31,299 - INFO - 127.0.0.1 - - [30/Jan/2025 14:10:31] "[35m[1mPOST /get_stock HTTP/1.1[0m" 500 -
+2025-01-30 15:43:39,599 - INFO -  * Detected change in 'e:\\Python Learn\\Test Webapp\\app.py', reloading
+2025-01-30 15:43:39,903 - INFO -  * Restarting with stat

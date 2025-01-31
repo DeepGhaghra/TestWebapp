@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Strategy Selector</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            overflow: hidden;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .form-group select {
+            background-color: #f9f9f9;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Stock Strategy Selector</h1>
+        <form id="stockForm">
+            <div class="form-group">
+                <label for="date">Date (dd-mm-yyyy):</label>
+                <input type="text" id="date" name="date" placeholder="Enter Date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category" required>
+                    <!-- Keys (indices, nifty50, etc.) will be loaded here -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="strategy">Strategy Selection:</label>
+                <select id="strategy" name="strategy" required>
+                    <option value="bullish">Bullish</option>
+                    <option value="bearish">Bearish</option>
+                    <option value="neutral">Neutral</option>
+                </select>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="submit-btn">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Stock Strategy. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Load category data from JSON file (keys only like "indices", "nifty50")
+        fetch('http://localhost:5000/all_stock_lists.json',{ mode: 'no-cors' })  // Update the URL
+        .then(response => response.json())
+        .then(data => {
+            const categorySelect = document.getElementById('category');
+            // Populate dropdown with the keys (category names)
+            Object.keys(data).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = key;
+                categorySelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error loading the category data:', error));
+
+        // Handle form submission
+        document.getElementById('stockForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const date = document.getElementById('date').value;
+            const category = document.getElementById('category').value;
+            const strategy = document.getElementById('strategy').value;
+
+            alert(`Date: ${date}\nCategory: ${category}\nStrategy: ${strategy}`);
+        });
+    </script>
+
+</body>
+</html>

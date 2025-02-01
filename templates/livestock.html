@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stock Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container input {
+            padding: 10px;
+            width: 60%;
+            margin-right: 5px;
+        }
+        .form-container button {
+            padding: 10px;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .result table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 50%;
+        }
+        .result table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Live Stock Data</h1>
+    <div class="form-container">
+        <form method="POST">
+            <input type="text" name="stock_symbol" placeholder="Enter Stock Symbol" required>
+            <button type="submit">Get Data</button>
+        </form>
+    </div>
+    {% if error_message %}
+        <div class="error">
+            <p>{{ error_message }}</p>
+        </div>
+    {% endif %}
+    {% if stock_data %}
+        <div class="result">
+            <h2>Stock Data for {{ stock_data['info']['companyName'] }}</h2>
+            <table>
+                <tr>
+                    <th>Last Price</th>
+                    <th>Change</th>
+                    <th>Percentage Change</th>
+                </tr>
+                <tr>
+                    <td>{{ stock_data['priceInfo']['lastPrice'] }}</td>
+                    <td>{{ stock_data['priceInfo']['change'] }}</td>
+                    <td>{{ stock_data['priceInfo']['pChange'] }}%</td>
+                </tr>
+            </table>
+        </div>
+    {% endif %}
+</body>
+</html>

@@ -66,16 +66,24 @@
             color: #888;
             margin-top: 30px;
         }
+        .form-group input[type="date"] {
+        width: 150px;  /* Adjust the width as needed */
+        height: 30px;  /* Adjust the height as needed */
+        font-size: 16px;  /* Adjust the font size */
+        padding: 5px;  /* Padding inside the input box */
+        border-radius: 5px;  /* Rounded corners */
+        border: 1px solid #ccc;  /* Border color */
+    }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Stock Strategy Selector</h1>
-        <form id="stockForm">
+        <form id="stockForm" action="/result" method="POST">
             <div class="form-group">
                 <label for="date">Date (dd-mm-yyyy):</label>
-                <input type="text" id="date" name="date" placeholder="Enter Date" required>
+                <input type="date" id="date" name="date" placeholder="dd-mm-yyyy" required>
             </div>
 
             <div class="form-group">
@@ -88,9 +96,12 @@
             <div class="form-group">
                 <label for="strategy">Strategy Selection:</label>
                 <select id="strategy" name="strategy" required>
-                    <option value="bullish">Bullish</option>
-                    <option value="bearish">Bearish</option>
-                    <option value="neutral">Neutral</option>
+                    <option value="abc_long">ABC Long</option>
+                    <option value="abc_short">ABC Short</option>
+                    <option value="bullish_floor">Bullish Reversal</option>
+                    <option value="bearish_floor">Bearish Reversal</option>
+                    <option value="alltimehigh">All Time High Range</option>
+
                 </select>
             </div>
 
@@ -105,31 +116,50 @@
     </div>
 
     <script>
-        // Load category data from JSON file (keys only like "indices", "nifty50")
-        fetch('http://localhost:5000/all_stock_lists.json',{ mode: 'no-cors' })  // Update the URL
-        .then(response => response.json())
-        .then(data => {
-            const categorySelect = document.getElementById('category');
-            // Populate dropdown with the keys (category names)
-            Object.keys(data).forEach(key => {
-                const option = document.createElement('option');
-                option.value = key;
-                option.textContent = key;
-                categorySelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error loading the category data:', error));
-
-        // Handle form submission
-        document.getElementById('stockForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const date = document.getElementById('date').value;
-            const category = document.getElementById('category').value;
-            const strategy = document.getElementById('strategy').value;
-
-            alert(`Date: ${date}\nCategory: ${category}\nStrategy: ${strategy}`);
-        });
+        // Fetch category data from the new Flask endpoint
+        fetch('/get-categories')
+            .then(response => response.json())
+            .then(data => {
+                const categorySelect = document.getElementById('category');
+                // Populate dropdown with the keys (category names)
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    Object.keys(data).forEach(key => {
+                        const option = document.createElement('option');
+                        option.value = key;
+                        option.textContent = key;
+                        categorySelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => console.error('Error loading category data:', error));
     </script>
+<script>
+    // Regex to match dd-mm-yyyy format
+    document.getElementById('stockForm').addEventListener('submit', function (event) {
+    const dateInput = document.getElementById('date').value.trim();
 
+    if (!dateInput) {
+        alert("Date is required.");
+        event.preventDefault();
+        return;
+    }
+
+    // Parse the value to ensure it's properly formatted
+    const dateParts = dateInput.split("-");
+    if (dateParts.length === 3) {
+        const [year, month, day] = dateParts;
+        if (!Number(day) || !Number(month) || !Number(year)) {
+            alert("Invalid date. Please use the browser-supported format.");
+            event.preventDefault();
+        }
+    } else {
+        alert("Invalid date format. Use browser-supported format.");
+        event.preventDefault();
+    }
+});
+
+</script>
 </body>
 </html>

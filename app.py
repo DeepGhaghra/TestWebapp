@@ -156,9 +156,11 @@ def result():
                 alert_list = abc_short_strategy(formatted_date, category)
                 result_message = f"ABC Short strategy executed for {category} on {formatted_date}. Alerts: {', '.join(alert_list)}"
             elif strategy == "bullish_floor":
-                result_message = f"Bullish Reversal strategy executed for {category} on {formatted_date}."
+                alert_list = run_bullish_ground_floor_strategy(formatted_date,category)
+                result_message = f"Bullish Reversal strategy executed for {category} on {formatted_date}.Alerts: {', '.join(alert_list)}"
             elif strategy == "bearish_floor":
-                result_message = f"Bearish Reversal strategy executed for {category} on {formatted_date}."
+                alert_list = run_bearish_ground_floor_strategy(formatted_date,category)
+                result_message = f"Bearish Reversal strategy executed for {category} on {formatted_date}.Alerts: {', '.join(alert_list)}"
             elif strategy == "alltimehigh":
                 result_message = f"All Time High Range strategy executed for {category} on {formatted_date}."
             else:

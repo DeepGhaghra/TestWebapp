@@ -118,7 +118,9 @@ def abc_short_strategy(date, category):
     except Exception as e:
         logger.error(f"Error in ABC Short strategy: {e}")
         return []
-
+def generate_tradingview_chart_link(stock_symbol: str) -> str:
+    base_url = "https://www.tradingview.com/chart/?symbol=NSE%3A"
+    return f"{base_url}{stock_symbol.upper()}"
 # Home page with form
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -151,20 +153,28 @@ def result():
         try:
             if strategy == "abc_long":
                 alert_list = abc_long_strategy(formatted_date, category)
-                result_message = f"ABC Long strategy Result for {category} on {formatted_date}."
-                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "ABC Long", "status": "Alert"} for symbol in alert_list]
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_message = f"Total alerts generated : {len(alert_list)}"
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "ABC Long", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "abc_short":
                 alert_list = abc_short_strategy(formatted_date, category)
-                result_message = f"ABC Short strategy executed for {category} on {formatted_date}."
-                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "ABC Short", "status": "Alert"} for symbol in alert_list]
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_message = f"Total alerts generated : {len(alert_list)}"
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "ABC Short", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "bullish_floor":
                 alert_list = run_bullish_ground_floor_strategy(formatted_date,category)
-                result_message = f"Bullish Reversal strategy executed for {category} on {formatted_date}."
-                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bullish Reversal", "status": "Alert"} for symbol in alert_list]
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_message = f"Total alerts generated : {len(alert_list)}"
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bullish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "bearish_floor":
                 alert_list = run_bearish_ground_floor_strategy(formatted_date,category)
-                result_message = f"Bearish Reversal strategy executed for {category} on {formatted_date}."
-                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "status": "Alert"} for symbol in alert_list]
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_message = f"Total alerts generated : {len(alert_list)}"
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "alltimehigh":
                 result_message = f"All Time High Range strategy executed for {category} on {formatted_date}."
             else:

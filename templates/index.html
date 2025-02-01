@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +12,9 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
-            width: 80%;
+            width: 40%;
             margin: 50px auto;
             background-color: #fff;
             border-radius: 10px;
@@ -20,34 +22,46 @@
             padding: 30px;
             overflow: hidden;
         }
+
         h1 {
             text-align: center;
             color: #4CAF50;
         }
+
         .form-group {
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
         }
+
         .form-group label {
             font-size: 16px;
             font-weight: bold;
             color: #333;
+            flex: 1;
+            text-align: left;
         }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 8px;
+
+        .form-group input,
+        .form-group select {
+            flex: 2;
+            padding: 8px;
+            font-size: 14px;
             border-radius: 5px;
             border: 1px solid #ccc;
         }
+
         .form-group select {
             background-color: #f9f9f9;
         }
+
         .button-container {
             display: flex;
             justify-content: center;
             margin-top: 30px;
         }
+
         .submit-btn {
             background-color: #4CAF50;
             color: white;
@@ -57,25 +71,34 @@
             font-size: 18px;
             cursor: pointer;
         }
+
         .submit-btn:hover {
             background-color: #45a049;
         }
+
         .footer {
             text-align: center;
             font-size: 14px;
             color: #888;
             margin-top: 30px;
         }
+
         .form-group input[type="date"] {
-        width: 150px;  /* Adjust the width as needed */
-        height: 30px;  /* Adjust the height as needed */
-        font-size: 16px;  /* Adjust the font size */
-        padding: 5px;  /* Padding inside the input box */
-        border-radius: 5px;  /* Rounded corners */
-        border: 1px solid #ccc;  /* Border color */
-    }
-        
-    .loading-spinner {
+            width: 150px;
+            /* Adjust the width as needed */
+            height: 30px;
+            /* Adjust the height as needed */
+            font-size: 16px;
+            /* Adjust the font size */
+            padding: 5px;
+            /* Padding inside the input box */
+            border-radius: 5px;
+            /* Rounded corners */
+            border: 1px solid #ccc;
+            /* Border color */
+        }
+
+        .loading-spinner {
             border: 6px solid #f3f3f3;
             border-top: 6px solid #3498db;
             border-radius: 50%;
@@ -87,8 +110,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .loading-message {
@@ -98,6 +126,7 @@
             display: inline-block;
             font-weight: bold;
         }
+
         .button-container {
             display: flex;
             justify-content: center;
@@ -121,6 +150,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="container">
@@ -182,40 +212,64 @@
             })
             .catch(error => console.error('Error loading category data:', error));
     </script>
-<script>
-    // Regex to match dd-mm-yyyy format
-    document.getElementById('stockForm').addEventListener('submit', function (event) {
-    const dateInput = document.getElementById('date').value.trim();
+    <script>
+        // Regex to match dd-mm-yyyy format
+        document.getElementById('stockForm').addEventListener('submit', function (event) {
+            const dateInput = document.getElementById('date').value.trim();
 
-    if (!dateInput) {
-        alert("Date is required.");
-        event.preventDefault();
-        return;
-    }
+            if (!dateInput) {
+                alert("Date is required.");
+                event.preventDefault();
+                return;
+            }
 
-    // Parse the value to ensure it's properly formatted
-    const dateParts = dateInput.split("-");
-    if (dateParts.length === 3) {
-        const [year, month, day] = dateParts;
-        if (!Number(day) || !Number(month) || !Number(year)) {
-            alert("Invalid date. Please use the browser-supported format.");
-            event.preventDefault();
+            // Parse the value to ensure it's properly formatted
+            const dateParts = dateInput.split("-");
+            if (dateParts.length === 3) {
+                const [year, month, day] = dateParts;
+                if (!Number(day) || !Number(month) || !Number(year)) {
+                    alert("Invalid date. Please use the browser-supported format.");
+                    event.preventDefault();
+                }
+            } else {
+                alert("Invalid date format. Use browser-supported format.");
+                event.preventDefault();
+            }
+        });
+
+    </script>
+    <script>
+        // Show the loading spinner when the form is submitted
+        document.getElementById('stockForm').addEventListener('submit', function (event) {
+            // Hide submit button and show loading spinner
+            document.querySelector('.submit-btn').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'inline-block';
+            document.getElementById('loadingMessage').style.display = 'inline-block';
+        });
+    </script>
+    <!-- script for submitting by defualt yesterday's date -->
+    <script>
+        // Function to set the default date to yesterday
+        function setDefaultDate() {
+          const dateInput = document.getElementById('date');
+          const today = new Date();
+          today.setDate(today.getDate() - 1);  // Set the date to yesterday
+          
+          const yyyy = today.getFullYear();
+          let mm = today.getMonth() + 1; // Months are zero-indexed
+          let dd = today.getDate();
+    
+          // Format the date as yyyy-mm-dd
+          if (mm < 10) mm = '0' + mm;
+          if (dd < 10) dd = '0' + dd;
+    
+          const yesterday = `${yyyy}-${mm}-${dd}`;
+          dateInput.value = yesterday; // Set the value of the input to yesterday's date
         }
-    } else {
-        alert("Invalid date format. Use browser-supported format.");
-        event.preventDefault();
-    }
-});
-
-</script>
-<script>
-    // Show the loading spinner when the form is submitted
-    document.getElementById('stockForm').addEventListener('submit', function (event) {
-        // Hide submit button and show loading spinner
-        document.querySelector('.submit-btn').style.display = 'none';
-        document.getElementById('loadingSpinner').style.display = 'inline-block';
-        document.getElementById('loadingMessage').style.display = 'inline-block';
-    });
-</script>
+    
+        // Call the function to set the default date when the page loads
+        window.onload = setDefaultDate;
+      </script>
 </body>
+
 </html>

@@ -151,24 +151,28 @@ def result():
         try:
             if strategy == "abc_long":
                 alert_list = abc_long_strategy(formatted_date, category)
-                result_message = f"ABC Long strategy Result for {category} on {formatted_date}. Alerts: {', '.join(alert_list)}"
+                result_message = f"ABC Long strategy Result for {category} on {formatted_date}."
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "ABC Long", "status": "Alert"} for symbol in alert_list]
             elif strategy == "abc_short":
                 alert_list = abc_short_strategy(formatted_date, category)
-                result_message = f"ABC Short strategy executed for {category} on {formatted_date}. Alerts: {', '.join(alert_list)}"
+                result_message = f"ABC Short strategy executed for {category} on {formatted_date}."
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "ABC Short", "status": "Alert"} for symbol in alert_list]
             elif strategy == "bullish_floor":
                 alert_list = run_bullish_ground_floor_strategy(formatted_date,category)
-                result_message = f"Bullish Reversal strategy executed for {category} on {formatted_date}.Alerts: {', '.join(alert_list)}"
+                result_message = f"Bullish Reversal strategy executed for {category} on {formatted_date}."
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bullish Reversal", "status": "Alert"} for symbol in alert_list]
             elif strategy == "bearish_floor":
                 alert_list = run_bearish_ground_floor_strategy(formatted_date,category)
-                result_message = f"Bearish Reversal strategy executed for {category} on {formatted_date}.Alerts: {', '.join(alert_list)}"
+                result_message = f"Bearish Reversal strategy executed for {category} on {formatted_date}."
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "status": "Alert"} for symbol in alert_list]
             elif strategy == "alltimehigh":
                 result_message = f"All Time High Range strategy executed for {category} on {formatted_date}."
             else:
                 result_message = "Invalid strategy selected."
-
+                result_data = []
             logger.info(f"Result message: {result_message}")
             # Render result page with output
-            return render_template('result.html', result_message=result_message)
+            return render_template('result.html', result_message=result_message,result_data=result_data)
         except Exception as e:
             logger.error(f"Error during strategy execution: {e}")
             return "An error occurred while processing your request. Please try again."

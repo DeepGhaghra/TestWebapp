@@ -74,47 +74,115 @@
             transition: background-color 0.3s ease;
             margin-top: 30px;
         }
-        
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .pagination button:hover {
+            background-color: #45a049;
+        }
+
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
     <div class="result-container">
         <h1>Strategy Scanner Result</h1>
-        <div class="result-message">
+       <!-- <div class="result-message">
             {{ result_message }}
-        </div>
+        </div> -->
 
         <!-- Table displaying results -->
-        <table class="result-table">
+        {% if result_data %}
+        <table class="result-table" id="resultTable">
             <thead>
                 <tr>
+                    <th>#</th> <!-- Auto-incrementing number column -->
                     <th>Date</th>
                     <th>Stock Symbol</th>
                     <th>Strategy</th>
-                    <th>Result</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for result in result_data %}
                 <tr>
+                    <td>{{ loop.index }}</td> <!-- Auto-incrementing number -->
                     <td>{{ result.date }}</td>
                     <td>{{ result.symbol }}</td>
                     <td>{{ result.strategy }}</td>
-                    <td>{{ result.status }}</td>
+                    <td></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
+        <!-- Pagination controls -->
+        <div class="pagination">
+            <button id="prevPage">Previous</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage">Next</button>
+        </div>
+        {% endif %}
+
         <a href="/" class="back-link">Back to Home</a>
     </div>
+
     <script>
-        // Show the loading spinner when the form is submitted
-        document.getElementById('strategyForm').addEventListener('submit', function (event) {
-            // Show the loading button and hide the submit button
-            document.querySelector('.submit-button').style.display = 'none';
-            document.getElementById('loadingButton').style.display = 'inline-block';
+        // Pagination logic
+        const rowsPerPage = 10; // Number of rows to display per page
+        const table = document.getElementById('resultTable');
+        const tbody = table.getElementsByTagName('tbody')[0];
+        const rows = tbody.getElementsByTagName('tr');
+        const pageInfo = document.getElementById('pageInfo');
+        const prevButton = document.getElementById('prevPage');
+        const nextButton = document.getElementById('nextPage');
+
+        let currentPage = 1;
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = (i >= start && i < end) ? '' : 'none';
+            }
+
+            pageInfo.textContent = `Page ${page} of ${Math.ceil(rows.length / rowsPerPage)}`;
+            prevButton.disabled = page === 1;
+            nextButton.disabled = page === Math.ceil(rows.length / rowsPerPage);
+        }
+
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
         });
+
+        nextButton.addEventListener('click', () => {
+            if (currentPage < Math.ceil(rows.length / rowsPerPage)) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initialize the first page
+        showPage(currentPage);
     </script>
 </body>
 </html>

@@ -74,6 +74,50 @@
         border-radius: 5px;  /* Rounded corners */
         border: 1px solid #ccc;  /* Border color */
     }
+    .loading-spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-message {
+            font-size: 18px;
+            color: #4CAF50;
+            margin-left: 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -107,6 +151,8 @@
 
             <div class="button-container">
                 <button type="submit" class="submit-btn">Submit</button>
+                <div id="loadingSpinner" class="loading-spinner" style="display:none;"></div>
+                <span id="loadingMessage" class="loading-message" style="display:none;">Processing....</span>
             </div>
         </form>
     </div>
@@ -160,6 +206,15 @@
     }
 });
 
+</script>
+<script>
+    // Show the loading spinner when the form is submitted
+    document.getElementById('stockForm').addEventListener('submit', function (event) {
+        // Hide submit button and show loading spinner
+        document.querySelector('.submit-btn').style.display = 'none';
+        document.getElementById('loadingSpinner').style.display = 'inline-block';
+        document.getElementById('loadingMessage').style.display = 'inline-block';
+    });
 </script>
 </body>
 </html>

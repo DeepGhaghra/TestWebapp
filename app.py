@@ -22,9 +22,7 @@ STOCK_CATEGORIES_FILE = os.path.join(DATA_DIR, 'all_stock_lists.json')
 OUTPUT_DIR = os.path.join(DATA_DIR, 'output')
 LOG_FILE = "logfile.log"
 thr_range = 3/100
-print (f"data dir : {DATA_DIR}")
-print (f"categro json dir : {STOCK_CATEGORIES_FILE}")
-print (f"output dir : {OUTPUT_DIR}")
+
 
 # Setup logging
 logging.basicConfig(
@@ -53,8 +51,6 @@ def get_categories():
         logger.error(f"Error loading categories: {str(e)}")
         return jsonify({"error": f"Unable to load categories: {str(e)}"})
     
-print(f"Current Working Directory: {os.getcwd()}")
-
 # ABC Long strategy function
 def abc_long_strategy(date, category):
     try:
@@ -115,7 +111,6 @@ def result():
         # Validate date format
         try:
             formatted_date = datetime.strptime(date, '%Y-%m-%d').strftime('%d-%m-%Y')
-            logger.info(f"Formatted date: {formatted_date}")
         except ValueError:
             logger.warning("Invalid date format received.")
             return "Invalid date format. Please use DD-MM-YYYY."

@@ -74,10 +74,7 @@
             transition: background-color 0.3s ease;
             margin-top: 30px;
         }
-
-        .back-link:hover {
-            background-color: #45a049;
-        }
+        
     </style>
 </head>
 <body>
@@ -111,5 +108,13 @@
 
         <a href="/" class="back-link">Back to Home</a>
     </div>
+    <script>
+        // Show the loading spinner when the form is submitted
+        document.getElementById('strategyForm').addEventListener('submit', function (event) {
+            // Show the loading button and hide the submit button
+            document.querySelector('.submit-button').style.display = 'none';
+            document.getElementById('loadingButton').style.display = 'inline-block';
+        });
+    </script>
 </body>
 </html>

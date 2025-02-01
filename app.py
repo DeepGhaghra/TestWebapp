@@ -84,6 +84,40 @@ def abc_long_strategy(date, category):
     except Exception as e:
         logger.error(f"Error in ABC Long strategy: {e}")
         return []
+def abc_short_strategy(date, category):
+    try:
+        logger.info(f"Executing ABC Short strategy for date: {date}, category: {category}")
+        
+        user_date = pd.to_datetime(date, format='%d-%m-%Y')
+        selected_stocks = load_selected_stocks(category.lower())
+        processed_symbols = get_processed_symbols(OUTPUT_DIR)
+        files = glob.glob(os.path.join(DATA_INPUT, "*.csv"))
+
+        selected_files = [file for file in files if os.path.basename(file).split(".")[0].upper() in selected_stocks]
+        if not selected_files:
+            # Return a message to the user that no matching files were found
+            result_message = "No matching files found for the selected stocks."
+            return render_template('result.html', result_message=result_message)
+        # Process each stock
+        alert_list = []
+        for file in selected_files:
+            symbol = os.path.basename(file).split(".")[0].upper()
+            if symbol in processed_symbols:
+                logger.info(f"Skipping already processed symbol: {symbol}")
+                continue
+            try:
+                if process_file_short(file, user_date):
+                    alert_list.append(symbol)
+                    logger.info(f"Alert generated for symbol: {symbol}")
+            except Exception as e:
+                logger.error(f"Error processing file {file}: {e}")
+
+        logger.info(f"Completed strategy execution. Alerts: {alert_list}")
+        return alert_list
+
+    except Exception as e:
+        logger.error(f"Error in ABC Short strategy: {e}")
+        return []
 
 # Home page with form
 @app.route('/', methods=['GET', 'POST'])
@@ -119,7 +153,8 @@ def result():
                 alert_list = abc_long_strategy(formatted_date, category)
                 result_message = f"ABC Long strategy Result for {category} on {formatted_date}. Alerts: {', '.join(alert_list)}"
             elif strategy == "abc_short":
-                result_message = f"ABC Short strategy executed for {category} on {formatted_date}."
+                alert_list = abc_short_strategy(formatted_date, category)
+                result_message = f"ABC Short strategy executed for {category} on {formatted_date}. Alerts: {', '.join(alert_list)}"
             elif strategy == "bullish_floor":
                 result_message = f"Bullish Reversal strategy executed for {category} on {formatted_date}."
             elif strategy == "bearish_floor":

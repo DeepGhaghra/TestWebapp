@@ -3,8 +3,6 @@ import json
 import logging
 import os
 from datetime import datetime
-from pathlib import Path
-import sys
 import pandas as pd
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from SMA_BB_Extract import calculate_bollinger_bands

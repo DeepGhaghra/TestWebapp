@@ -6,17 +6,19 @@ import pandas as pd
 from strategies.utils import load_selected_stocks
 from .candle_patterns import detect_bullish_patterns, detect_bearish_patterns
 
-async def run_bullish_ground_floor_strategy(update, context, date, category, processing_message):
+DATA_INPUT = r"E:\Python Learn\Git File\eod2\src\eod2_data\daily"
+
+def run_bullish_ground_floor_strategy(update, context, date, category, processing_message):
     try:
         user_date = pd.to_datetime(date, format='%d-%m-%Y')
         selected_stocks = load_selected_stocks(category)
-        files = glob.glob(os.path.join("E:\\Python Learn\\Git File\\eod2\\src\\eod2_data\\daily", "*.csv"))
+        files = glob.glob(os.path.join(DATA_INPUT, "*.csv"))
 
         selected_files = [file for file in files if os.path.basename(file).split(".")[0].upper() in selected_stocks]
 
-        if not selected_files:
+        ''' if not selected_files:
             await processing_message.edit_text("No matching files found for the selected stocks.")
-            return
+            return'''
 
         alert_list = []
         for file in selected_files:
@@ -34,32 +36,26 @@ async def run_bullish_ground_floor_strategy(update, context, date, category, pro
             if bullish_patterns:
                 alert_list.append(symbol)
 
-        await processing_message.delete()
-
         final_message = f"✅ Bullish Ground Floor strategy executed for <b>{category.upper()}</b> and <b>{user_date.strftime('%d-%m-%Y')}</b>. \nTotal alerts generated: <b>{len(alert_list)}</b>.\n"
         if alert_list:
             final_message += "\nHere are the scanned alerts:\n"
             final_message += "\n".join([f"• {symbol}" for symbol in alert_list])
-
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=final_message, parse_mode="HTML"
-        )
+        
     except Exception as e:
         logger.error(f"Error executing Bullish Ground Floor strategy: {e}")
-        await processing_message.edit_text("❌ An error occurred while executing the Bullish Ground Floor strategy.")
+        return False
 
-async def run_bearish_ground_floor_strategy(update, context, date, category, processing_message):
+def run_bearish_ground_floor_strategy(update, context, date, category, processing_message):
     try:
         user_date = pd.to_datetime(date, format='%d-%m-%Y')
         selected_stocks = load_selected_stocks(category)
-        files = glob.glob(os.path.join("E:\\Python Learn\\Git File\\eod2\\src\\eod2_data\\daily", "*.csv"))
+        files = glob.glob(os.path.join(DATA_INPUT, "*.csv"))
 
         selected_files = [file for file in files if os.path.basename(file).split(".")[0].upper() in selected_stocks]
 
-        if not selected_files:
+        '''if not selected_files:
             await processing_message.edit_text("No matching files found for the selected stocks.")
-            return
+            return'''
 
         alert_list = []
         for file in selected_files:
@@ -77,17 +73,11 @@ async def run_bearish_ground_floor_strategy(update, context, date, category, pro
             if bearish_patterns:
                 alert_list.append(symbol)
 
-        await processing_message.delete()
-
         final_message = f"✅ Bearish High Floor strategy executed for <b>{category.upper()}</b> and <b>{user_date.strftime('%d-%m-%Y')}</b>. \nTotal alerts generated: <b>{len(alert_list)}</b>.\n"
         if alert_list:
             final_message += "\nHere are the scanned alerts:\n"
             final_message += "\n".join([f"• {symbol}" for symbol in alert_list])
 
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=final_message, parse_mode="HTML"
-        )
     except Exception as e:
         logger.error(f"Error executing Bearish Ground Floor strategy: {e}")
-        await processing_message.edit_text("❌ An error occurred while executing the Bearish Ground Floor strategy.")
+        return False

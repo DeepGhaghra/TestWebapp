@@ -1,3 +1,5 @@
+# Ignore the output folder in the data directory
+/data/output/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

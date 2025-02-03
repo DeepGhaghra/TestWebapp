@@ -170,7 +170,7 @@
 
             <div class="form-group">
                 <label for="strategy">Strategy Selection:</label>
-                <select id="strategy" name="strategy" required>
+                <select id="strategy" name="strategy" required onchange="toggleRangeInput()">
                     <option value="abc_long">ABC Long</option>
                     <option value="abc_short">ABC Short</option>
                     <option value="bullish_floor">Bullish Reversal</option>
@@ -179,7 +179,10 @@
 
                 </select>
             </div>
-
+            <div id="range-box" class="form-group" style="display: none;">
+                <label for="range">Enter % Range:</label>
+                <input type="number" id="range" name="range" placeholder="Enter percentage">
+            </div>
             <div class="button-container">
                 <button type="submit" class="submit-btn">Submit</button>
                 <div id="loadingSpinner" class="loading-spinner" style="display:none;"></div>
@@ -191,7 +194,25 @@
     <div class="footer">
         <p>&copy; 2025 Stock Strategy. All rights reserved.</p>
     </div>
-
+    <script>
+        // This function will toggle the visibility of the range input box based on the strategy selection
+        function toggleRangeInput() {
+            const strategySelect = document.getElementById('strategy');
+            const rangeBox = document.getElementById('range-box');
+            const selectedStrategy = strategySelect.value;
+    
+            // If "All Time High Range" is selected, show the range input box
+            if (selectedStrategy === 'alltimehigh') {
+                rangeBox.style.display = 'block';
+            } else {
+                rangeBox.style.display = 'none';
+                document.getElementById('range').value = ''; // Clear the input value when it hides
+            }
+        }
+    
+        // Trigger the function once when the page loads to set initial visibility
+        window.onload = toggleRangeInput;
+    </script>
     <script>
         // Fetch category data from the new Flask endpoint
         fetch('/get-categories')

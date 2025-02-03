@@ -46,3 +46,7 @@ def get_latest_modified_csv(directory):
     selected_file = random.choice(csv_files)
     modified_date = datetime.fromtimestamp(os.path.getmtime(selected_file)).strftime("%d-%m-%Y")
     return modified_date
+
+def generate_tradingview_chart_link(stock_symbol: str) -> str:
+    base_url = "https://www.tradingview.com/chart/?symbol=NSE%3A"
+    return f"{base_url}{stock_symbol.upper()}"

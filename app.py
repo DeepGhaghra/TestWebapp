@@ -9,9 +9,9 @@ from SMA_BB_Extract import calculate_bollinger_bands
 from strategies import (
     process_file_long, process_file_short,
     run_bullish_ground_floor_strategy, run_bearish_ground_floor_strategy,
-    load_categories, load_selected_stocks, get_processed_symbols, get_latest_modified_csv,
-    is_bullish_candle, is_bearish_candle, detect_bullish_patterns, detect_bearish_patterns
+     load_selected_stocks, get_processed_symbols,generate_tradingview_chart_link    
 )
+from strategies.all_time_high import check_all_time_high
 
 # Constants
 DATA_INPUT = r"E:\Python Learn\Git File\eod2\src\eod2_data\daily"
@@ -139,7 +139,7 @@ def result():
         date = request.form['date']
         category = request.form['category']
         strategy = request.form['strategy']
-     
+        range = request.form['range']
         logger.info(f"Form data received: date={date}, category={category}, strategy={strategy}")
 
         # Validate date format
@@ -177,6 +177,9 @@ def result():
                 result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "alltimehigh":
                 result_message = f"All Time High Range strategy executed for {category} on {formatted_date}."
+                alert_list = check_all_time_high(formatted_date,category,range)
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
+
             else:
                 result_message = "Invalid strategy selected."
                 result_data = []

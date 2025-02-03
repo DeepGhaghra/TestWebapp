@@ -3,17 +3,15 @@ import json
 import logging
 import os
 from datetime import datetime
-from pathlib import Path
-import sys
 import pandas as pd
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from SMA_BB_Extract import calculate_bollinger_bands
 from strategies import (
     process_file_long, process_file_short,
     run_bullish_ground_floor_strategy, run_bearish_ground_floor_strategy,
-    load_categories, load_selected_stocks, get_processed_symbols, get_latest_modified_csv,
-    is_bullish_candle, is_bearish_candle, detect_bullish_patterns, detect_bearish_patterns
+     load_selected_stocks, get_processed_symbols,generate_tradingview_chart_link    
 )
+from strategies.all_time_high import check_all_time_high
 
 # Constants
 DATA_INPUT = r"E:\Python Learn\Git File\eod2\src\eod2_data\daily"
@@ -22,9 +20,7 @@ STOCK_CATEGORIES_FILE = os.path.join(DATA_DIR, 'all_stock_lists.json')
 OUTPUT_DIR = os.path.join(DATA_DIR, 'output')
 LOG_FILE = "logfile.log"
 thr_range = 3/100
-print (f"data dir : {DATA_DIR}")
-print (f"categro json dir : {STOCK_CATEGORIES_FILE}")
-print (f"output dir : {OUTPUT_DIR}")
+
 
 # Setup logging
 logging.basicConfig(
@@ -53,8 +49,6 @@ def get_categories():
         logger.error(f"Error loading categories: {str(e)}")
         return jsonify({"error": f"Unable to load categories: {str(e)}"})
     
-print(f"Current Working Directory: {os.getcwd()}")
-
 # ABC Long strategy function
 def abc_long_strategy(date, category):
     try:
@@ -90,7 +84,43 @@ def abc_long_strategy(date, category):
     except Exception as e:
         logger.error(f"Error in ABC Long strategy: {e}")
         return []
+def abc_short_strategy(date, category):
+    try:
+        logger.info(f"Executing ABC Short strategy for date: {date}, category: {category}")
+        
+        user_date = pd.to_datetime(date, format='%d-%m-%Y')
+        selected_stocks = load_selected_stocks(category.lower())
+        processed_symbols = get_processed_symbols(OUTPUT_DIR)
+        files = glob.glob(os.path.join(DATA_INPUT, "*.csv"))
 
+        selected_files = [file for file in files if os.path.basename(file).split(".")[0].upper() in selected_stocks]
+        if not selected_files:
+            # Return a message to the user that no matching files were found
+            result_message = "No matching files found for the selected stocks."
+            return render_template('result.html', result_message=result_message)
+        # Process each stock
+        alert_list = []
+        for file in selected_files:
+            symbol = os.path.basename(file).split(".")[0].upper()
+            if symbol in processed_symbols:
+                logger.info(f"Skipping already processed symbol: {symbol}")
+                continue
+            try:
+                if process_file_short(file, user_date):
+                    alert_list.append(symbol)
+                    logger.info(f"Alert generated for symbol: {symbol}")
+            except Exception as e:
+                logger.error(f"Error processing file {file}: {e}")
+
+        logger.info(f"Completed strategy execution. Alerts: {alert_list}")
+        return alert_list
+
+    except Exception as e:
+        logger.error(f"Error in ABC Short strategy: {e}")
+        return []
+def generate_tradingview_chart_link(stock_symbol: str) -> str:
+    base_url = "https://www.tradingview.com/chart/?symbol=NSE%3A"
+    return f"{base_url}{stock_symbol.upper()}"
 # Home page with form
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -109,13 +139,12 @@ def result():
         date = request.form['date']
         category = request.form['category']
         strategy = request.form['strategy']
-     
+        range = request.form['range']
         logger.info(f"Form data received: date={date}, category={category}, strategy={strategy}")
 
         # Validate date format
         try:
             formatted_date = datetime.strptime(date, '%Y-%m-%d').strftime('%d-%m-%Y')
-            logger.info(f"Formatted date: {formatted_date}")
         except ValueError:
             logger.warning("Invalid date format received.")
             return "Invalid date format. Please use DD-MM-YYYY."
@@ -124,21 +153,42 @@ def result():
         try:
             if strategy == "abc_long":
                 alert_list = abc_long_strategy(formatted_date, category)
-                result_message = f"ABC Long strategy Result for {category} on {formatted_date}. Alerts: {', '.join(alert_list)}"
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_message = f"Total alerts generated : {len(alert_list)}"
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "ABC Long", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "abc_short":
-                result_message = f"ABC Short strategy executed for {category} on {formatted_date}."
+                alert_list = abc_short_strategy(formatted_date, category)
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_message = f"Total alerts generated : {len(alert_list)}"
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "ABC Short", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "bullish_floor":
-                result_message = f"Bullish Reversal strategy executed for {category} on {formatted_date}."
+                alert_list = run_bullish_ground_floor_strategy(formatted_date,category)
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_message = f"Total alerts generated : {len(alert_list)}"
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bullish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "bearish_floor":
-                result_message = f"Bearish Reversal strategy executed for {category} on {formatted_date}."
+                alert_list = run_bearish_ground_floor_strategy(formatted_date,category)
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_message = f"Total alerts generated : {len(alert_list)}"
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "alltimehigh":
                 result_message = f"All Time High Range strategy executed for {category} on {formatted_date}."
+                alert_list = check_all_time_high(category,range)
+                print(f"alerrtttrtrttr-----{alert_list}")
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
+
             else:
                 result_message = "Invalid strategy selected."
-
+                result_data = []
             logger.info(f"Result message: {result_message}")
             # Render result page with output
-            return render_template('result.html', result_message=result_message)
+            return render_template('result.html', result_message=result_message,result_data=result_data)
         except Exception as e:
             logger.error(f"Error during strategy execution: {e}")
             return "An error occurred while processing your request. Please try again."

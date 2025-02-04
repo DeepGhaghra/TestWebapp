@@ -176,9 +176,11 @@ def result():
                 result_message = f"Total alerts generated : {len(alert_list)}"
                 result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
             elif strategy == "alltimehigh":
-                result_message = f"All Time High Range strategy executed for {category} on {formatted_date}."
-                alert_list = check_all_time_high(formatted_date,category,range)
-                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "Bearish Reversal", "link":link} for symbol ,link in zip(alert_list, links)]
+                alert_list = check_all_time_high(category,range)
+                links = [generate_tradingview_chart_link(stock) for stock in alert_list]
+                
+                result_message = f"Total alerts generated : {len(alert_list)} within {range}% ."
+                result_data = [{"date": formatted_date, "symbol": symbol, "strategy": "All Time High", "link":link} for symbol ,link in zip(alert_list, links)]
 
             else:
                 result_message = "Invalid strategy selected."

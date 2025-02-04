@@ -1,9 +1,9 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
 def is_bullish_candle(row):
     try:
+        row=row.copy()
         row['Close'] = round(float(row['Close']), 2)
         row['Open'] = round(float(row['Open']), 2)
         row['High'] = round(float(row['High']), 2)
@@ -26,6 +26,7 @@ def is_bullish_candle(row):
 
 def is_bearish_candle(row):
     try:
+        row=row.copy()
         row['Close'] = round(float(row['Close']), 2)
         row['Open'] = round(float(row['Open']), 2)
         row['High'] = round(float(row['High']), 2)
